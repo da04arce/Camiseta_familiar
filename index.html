@@ -297,8 +297,8 @@
           </div>
           <div class="grid">
             <div class="full">
-              <label>Nombre y Apellido</label>
-              <input type="text" name="nombre" required placeholder="Ej.: Dayi Arce">
+              <label>Agregar nombre y/o Apellido como quieres que se vea en la camiseta</label>
+              <input type="text" name="nombre" required placeholder="Ej.: Luis Arias">
             </div>
             <div>
               <label>Talla</label>
@@ -368,8 +368,9 @@
       submitBtn.textContent = "Enviando...";
 
       try {
-        const response = await fetch(APPS_SCRIPT_URL, {
+        await fetch(APPS_SCRIPT_URL, {
           method: "POST",
+          mode: "no-cors",
           headers: {"Content-Type":"text/plain;charset=utf-8"},
           body: JSON.stringify({
             timestamp: new Date().toISOString(),
@@ -377,12 +378,8 @@
           })
         });
 
-        const result = await response.json();
-
-        if (!result.ok) throw new Error(result.error || "No se pudo guardar.");
-
         statusBox.className = "status ok";
-        statusBox.textContent = "¡Pedido registrado correctamente!";
+        statusBox.textContent = "¡Pedido enviado correctamente!";
         form.reset();
         peopleContainer.innerHTML = "";
         personCount = 0;
