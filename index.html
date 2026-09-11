@@ -207,6 +207,24 @@
       .actions{gap:10px}
     }
 
+
+    .no-number-option{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-top:12px;
+      cursor:pointer;
+      width:max-content;
+      font-weight:700;
+      color:var(--muted);
+    }
+    .no-number-option input{
+      width:20px;
+      height:20px;
+      margin:0;
+      accent-color:var(--red-2);
+    }
+
   </style>
 </head>
 <body class="landing">
@@ -286,7 +304,7 @@
 
 
     let personCount = 0;
-    const sizes = ["XXS","XS","S","M","L","XL","XXL","3XL"];
+    const sizes = ["2","4","6","8","10","12","14","16","XXS","XS","S","M","L","XL","XXL","3XL"];
 
     function personTemplate(index, removable) {
       return `
@@ -304,12 +322,21 @@
               <label>Talla</label>
               <select name="talla" required>
                 <option value="">Seleccionar talla</option>
-                ${sizes.map(s => `<option value="${s}">${s}</option>`).join("")}
+                <optgroup label="Niños">
+                  ${["2","4","6","8","10","12","14","16"].map(s => `<option value="${s}">${s}</option>`).join("")}
+                </optgroup>
+                <optgroup label="Adultos">
+                  ${["XXS","XS","S","M","L","XL","XXL","3XL"].map(s => `<option value="${s}">${s}</option>`).join("")}
+                </optgroup>
               </select>
             </div>
             <div>
               <label>Número</label>
               <input type="number" name="numero" min="0" max="99" required placeholder="Ej.: 10">
+              <label class="no-number-option">
+                <input type="checkbox" class="sin-numero">
+                <span>Sin número</span>
+              </label>
             </div>
           </div>
         </div>
@@ -338,6 +365,23 @@
       }
     });
 
+    peopleContainer.addEventListener("change", (e) => {
+      if (e.target.classList.contains("sin-numero")) {
+        const card = e.target.closest(".person");
+        const numberInput = card.querySelector('[name="numero"]');
+        if (e.target.checked) {
+          numberInput.value = "";
+          numberInput.disabled = true;
+          numberInput.required = false;
+          numberInput.placeholder = "Sin número";
+        } else {
+          numberInput.disabled = false;
+          numberInput.required = true;
+          numberInput.placeholder = "Ej.: 10";
+        }
+      }
+    });
+
     addPersonBtn.addEventListener("click", addPerson);
 
     form.addEventListener("submit", async (e) => {
@@ -349,7 +393,7 @@
         orden: i + 1,
         nombre: card.querySelector('[name="nombre"]').value.trim(),
         talla: card.querySelector('[name="talla"]').value,
-        numero: card.querySelector('[name="numero"]').value
+        numero: card.querySelector(".sin-numero")?.checked ? "Sin número" : card.querySelector('[name="numero"]').value
       }));
 
       if (people.some(p => !p.nombre || !p.talla || p.numero === "")) {
