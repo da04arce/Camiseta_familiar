@@ -345,7 +345,7 @@
 
 
     let personCount = 0;
-    const sizes = ["2","4","6","8","10","12","14","16","XXS","XS","S","M","L","XL","XXL","3XL"];
+    const sizes = ["3XS","XXS","XS","S","M","L","XL","XXL","3XL"];
 
     function personTemplate(index, removable) {
       return `
@@ -363,10 +363,7 @@
               <label>Talla</label>
               <select name="talla" required>
                 <option value="">Seleccionar talla</option>
-                <optgroup label="Niños">
-                  ${["2","4","6","8","10","12","14","16"].map(s => `<option value="${s}">${s}</option>`).join("")}
-                </optgroup>
-                <optgroup label="Adultos">
+                <optgroup label="Tallas">
                   ${["3XS","XXS","XS","S","M","L","XL","XXL","3XL"].map(s => `<option value="${s}">${s}</option>`).join("")}
                 </optgroup>
               </select>
